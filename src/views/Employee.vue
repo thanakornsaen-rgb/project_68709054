@@ -1,14 +1,18 @@
 <template>
   <div class="container mt-4">
     <!-- หัวข้อหน้า -->
-    <h2 class="mb-3">รายชื่อลูกค้า</h2>
+    <h2 class="mb-3">รายชื่อพนักงาน</h2>
     
     <!-- ตารางแสดงข้อมูลลูกค้า -->
+     <div class="text-end mb-2">
+      <a href="/add_employee" class="btn btn-secondary">Add+</a>
+
+     </div>
     <table class="table table-bordered table-striped">
       <thead class="table-dark">
         <tr>
           <th>ลำดับที่</th>        <!-- index -->
-          <th>รหัสลูกค้า</th>     <!-- customer_id -->
+          <th>รหัสพนักงาน</th>     <!-- customer_id -->
           <th>ชื่อ</th>            <!-- firstName -->
           <th>นามสกุล</th>        <!-- lastName -->
           <th>เบอร์โทร</th>       <!-- phone -->
@@ -62,7 +66,7 @@ export default {
     const fetchdata = async () => {
       try {
         // เรียก API (PHP)
-        const response = await fetch("http://localhost/week3_68709054/php_api/show_employee.php");
+        const response = await fetch("http://localhost/project_week3_vue/php_api/show_employee.php");
 
         // ตรวจสอบว่าการเรียกสำเร็จหรือไม่
         if (!response.ok) {
