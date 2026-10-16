@@ -1,7 +1,7 @@
 <template>
   <div class="container mt-4">
-    <h2 class="mb-3">รายชื่อลูกค้า</h2>
-    
+    <h2 class="mb-3">รายชื่อนักศึกษา</h2>
+   
     <div class="mb-3">
       <button class="btn btn-primary" @click="openAddModal">
         Add <i class="bi bi-plus-circle"></i>
@@ -11,27 +11,27 @@
     <table class="table table-bordered table-striped">
       <thead class="table-primary">
         <tr>
-          <th>ID</th>
-          <th>ชื่อ</th>
-          <th>นามสกุล</th>
-          <th>เบอร์โทร</th>
-          <th>ชื่อผู้ใช้</th>
+           <th>รหัสนักศึกษา</th>     <!-- student_id -->
+          <th>ชื่อ</th>            <!-- first_name -->
+          <th>นามสกุล</th>        <!-- last_name -->
+          <th>เบอร์โทรศัพท์</th>       <!-- phone -->
+          <th>อีเมล</th>      <!-- username -->
           <th>แก้ไข/ลบ</th>
         </tr>
       </thead>
       <tbody>
-        <tr v-for="customer in customers" :key="customer.customer_id">
-          <td>{{ customer.customer_id }}</td>
-          <td>{{ customer.firstName }}</td>
-          <td>{{ customer.lastName }}</td>
-          <td>{{ customer.phone }}</td>
-          <td>{{ customer.username }}</td>
+        <tr v-for="item in student" :key="item.student_id">
+          <td>{{ item.student_id }}</td> <!-- รหัสนักศึกษา -->
+          <td>{{ item.first_name }}</td>   <!-- ชื่อ -->
+          <td>{{ item.last_name }}</td>    <!-- นามสกุล -->
+          <td>{{ item.phone }}</td>       <!-- เบอร์โทร -->
+          <td>{{ item.email }}</td>    <!-- อีเมล -->  
           <td>
-            <button class="btn btn-warning btn-sm" @click="openEditModal(customer)">
+            <button class="btn btn-warning btn-sm" @click="openEditModal(item)">
               แก้ไข
             </button>
             |
-            <button class="btn btn-danger btn-sm" @click="deleteCustomer(customer.customer_id)">
+            <button class="btn btn-danger btn-sm" @click="deleteEmployee(item.student_id)">
               ลบ
             </button>
           </td>
@@ -47,35 +47,29 @@
       <div class="modal-dialog">
         <div class="modal-content">
           <div class="modal-header">
-            <h5 class="modal-title">{{ isEditMode ? "แก้ไขข้อมูลลูกค้า" : "เพิ่มลูกค้าใหม่" }}</h5>
+            <h5 class="modal-title">{{ isEditMode ? "แก้ไขข้อมูลผู้ติดต่อ" : "เพิ่มผู้ติดต่อใหม่" }}</h5>
             <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
           </div>
           <div class="modal-body">
             <form @submit.prevent="saveCustomer">
               <div class="mb-3">
                 <label class="form-label">ชื่อ</label>
-                <input v-model="editCustomer.firstName" type="text" class="form-control" required>
+                <input v-model="editEmployee.first_name" type="text" class="form-control" required>
               </div>
               <div class="mb-3">
                 <label class="form-label">นามสกุล</label>
-                <input v-model="editCustomer.lastName" type="text" class="form-control" required>
+                <input v-model="editEmployee.last_name" type="text" class="form-control" required>
               </div>
               <div class="mb-3">
-                <label class="form-label">เบอร์โทร</label>
-                <input v-model="editCustomer.phone" type="text" class="form-control" required>
+                <label class="form-label">เบอร์โทรศัพท์</label>
+                <input v-model="editEmployee.phone" type="text" class="form-control" required>
               </div>
               <div class="mb-3">
-                <label class="form-label">ชื่อผู้ใช้</label>
-                <input v-model="editCustomer.username" type="text" class="form-control" required>
-              </div>
-              <div class="mb-3">
-                <label class="form-label">รหัสผ่าน</label>
-                <input v-model="editCustomer.password" type="password" class="form-control"
-                       :required="!isEditMode"
-                       placeholder="กรอกเฉพาะเมื่อเพิ่มใหม่หรือเปลี่ยนรหัสผ่าน">
+                <label class="form-label">อีเมล</label>
+                <input v-model="editEmployee.email" type="text" class="form-control" required>
               </div>
               <button type="submit" class="btn btn-success">
-                {{ isEditMode ? "บันทึกการแก้ไข" : "เพิ่มลูกค้า" }}
+                {{ isEditMode ? "บันทึกการแก้ไข" : "เพิ่ม" }}
               </button>
             </form>
           </div>
@@ -90,22 +84,22 @@
 import { ref, onMounted } from "vue";
 
 export default {
-  name: "CustomerList",
+  name: "EmployeeList",
   setup() {
-    const customers = ref([]);
+    const student = ref([]);
     const loading = ref(true);
     const error = ref(null);
-    const editCustomer = ref({});
+    const editEmployee = ref({});
     const isEditMode = ref(false);
     let editModal = null;
 
-    const fetchCustomers = async () => {
+    const fetchEmployee = async () => {
       try {
-        const response = await fetch("http://localhost/project_week3_vue/php_api/customer_crud.php");
+        const response = await fetch("http://localhost/project_week3_vue/php_api/student_crud.php");
         const result = await response.json();
 
         if (result.success) {
-          customers.value = result.data;
+          student.value = result.data;
         } else {
           error.value = result.message;
         }
@@ -117,7 +111,7 @@ export default {
     };
 
     onMounted(() => {
-      fetchCustomers();
+      fetchEmployee();
       const modalEl = document.getElementById("editModal");
       editModal = new window.bootstrap.Modal(modalEl);
     });
@@ -125,40 +119,39 @@ export default {
     // ✅ เปิด Modal เพิ่มลูกค้าใหม่
     const openAddModal = () => {
       isEditMode.value = false;
-      editCustomer.value = {
-        firstName: "",
-        lastName: "",
+      editEmployee.value = {
+        first_name: "",
+        last_name: "",
         phone: "",
-        username: "",
-        password: ""
+        email: ""
       };
       editModal.show();
     };
 
     // ✅ เปิด Modal แก้ไขลูกค้า
-    const openEditModal = (customer) => {
+    const openEditModal = (item) => {
       isEditMode.value = true;
-      editCustomer.value = { ...customer, password: "" };
+      editEmployee.value = { ...item};
       editModal.show();
     };
 
     // ✅ ใช้ฟังก์ชันเดียวสำหรับทั้งเพิ่ม/แก้ไข
     const saveCustomer = async () => {
-      const url = "http://localhost/project_week3_vue/php_api/customer_crud.php";
+      const url = "http://localhost/project_week3_vue/php_api/student_crud.php";
       const method = isEditMode.value ? "PUT" : "POST";
 
       try {
         const response = await fetch(url, {
           method,
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(editCustomer.value)
+          body: JSON.stringify(editEmployee.value)
         });
 
         const result = await response.json();
 
         if (result.success) {
           alert(result.message);
-          fetchCustomers();
+          fetchEmployee();
           editModal.hide();
         } else {
           alert(result.message);
@@ -169,17 +162,17 @@ export default {
     };
 
     // ✅ ลบลูกค้า
-    const deleteCustomer = async (id) => {
+    const deleteEmployee = async (id) => {
       if (!confirm("คุณต้องการลบข้อมูลนี้ใช่หรือไม่?")) return;
       try {
-        const response = await fetch("http://localhost/project_week3_vue/php_api/customer_crud.php", {
+        const response = await fetch("http://localhost/project_week3_vue/php_api/student_crud.php", {
           method: "DELETE",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ customer_id: id })
+          body: JSON.stringify({ student_id: id })
         });
         const result = await response.json();
         if (result.success) {
-          customers.value = customers.value.filter(c => c.customer_id !== id);
+          student.value = student.value.filter(c => c.student_id !== id);
           alert(result.message);
         } else {
           alert(result.message);
@@ -190,15 +183,15 @@ export default {
     };
 
     return {
-      customers,
+      student,
       loading,
       error,
-      editCustomer,
+      editEmployee,
       isEditMode,
       openAddModal,
       openEditModal,
       saveCustomer,
-      deleteCustomer
+      deleteEmployee
     };
   }
 };

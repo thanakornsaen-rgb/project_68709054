@@ -15,38 +15,12 @@
           <li class="nav-item">
             <router-link class="nav-link" to="/">Home</router-link>
           </li>
-          <li class="nav-item">
-            <router-link class="nav-link" to="/customer_crud">CustomerCRUD</router-link>
-          </li>
-           <li class="nav-item">
-            <router-link class="nav-link" to="/customer">Customer</router-link>
-          </li>
           <li class="nav-item dropdown">
           <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-            Contact
+            Student
           </a>
           <ul class="dropdown-menu">
-            <li><a class="dropdown-item" href="/contact">Contact</a></li>
-            <li><a class="dropdown-item" href="/contact_crud">Contact CURD</a></li>
-          </ul>
-        </li>
-          <li class="nav-item dropdown">
-          <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-            Employee
-          </a>
-          <ul class="dropdown-menu">
-            <li><a class="dropdown-item" href="/employee">Employee</a></li>
-            <li><a class="dropdown-item" href="/employee_crud">Employee CURD</a></li>
-          </ul>
-        </li>
-           <li class="nav-item dropdown">
-          <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-            Register
-          </a>
-          <ul class="dropdown-menu">
-            <li><a class="dropdown-item" href="#">Register</a></li>
-            <li><a class="dropdown-item" href="#">Login</a></li>
-            <li><a class="dropdown-item" href="#">Logout</a></li>
+            <li><a class="dropdown-item" href="/student_crud">Student_crud CURD</a></li>
           </ul>
         </li>
            <li class="nav-item">
